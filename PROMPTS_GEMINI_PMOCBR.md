@@ -127,13 +127,18 @@ Modelo de dados da solicitacao:
 Formulario (semi dinamico):
 - Parte fixa:
   - nomeResponsavel
-  - empresa
-  - cnpj (opcional)
-  - cidade
+  - CPF
+  - telefone com ddd 
+  - razaosocial
+  - CNPJ 
+  - CEP 
+  - Endereço completo
+  - Data de início
+  - data de término
   - tipoServico
-  - observacoes (opcional)
+  - observacoes (se necessário algo especifico)
 - Parte selecionavel:
-  - 5 checkboxes de exemplo em lista configuravel local
+  - 2 checkboxes de exemplo em lista configuravel local
 
 Validacoes:
 - Campos obrigatorios nao podem ficar vazios.

@@ -1,121 +1,79 @@
 # PMOCBR
 
-Aplicativo Android para solicitacao de ART (documento de engenharia), com autenticacao Google, registro de solicitacoes e acompanhamento basico.
+Aplicativo Android para solicitação de ART (documento de engenharia), com autenticação Google, registro de solicitações e acompanhamento básico.
 
 ## Objetivo do projeto
 
 O PMOCBR permite que um cliente:
-- faca login com Google;
-- preencha e envie uma solicitacao de ART;
-- receba confirmacao com data/hora e ID unica da solicitacao;
-- acompanhe o andamento basico;
-- visualize o historico das solicitacoes;
-- acesse configuracoes de conta e privacidade.
+- Faça login com Google;
+- Preencha e envie uma solicitação de ART;
+- Receba confirmação com data/hora e ID única da solicitação;
+- Acompanhe o andamento básico;
+- Visualize o histórico das solicitações;
+- Acesse configurações de conta e privacidade.
 
-## Escopo confirmado (MVP)
+## Escopo Finalizado (MVP)
 
 - Android com `Jetpack Compose + Material 3`
-- Login apenas com Google
-- Tela inicial com 4 modulos: `Solicitar`, `Acompanhar`, `Historico`, `Configuracoes`
-- Formulario de solicitacao ART sem anexos
-- ID unica no formato `PMOC-AAAAMMDD-4chars` (ex.: `PMOC-20260428-AB12`)
-- Persistencia em Firebase (`Auth + Firestore`) no plano gratuito
-- Envio de e-mail via `Cloud Functions` (backend)
-- Historico cronologico simples, sem filtros no MVP
-- Sem offline no MVP
-- LGPD minimo para Play interna: consentimento + politica de privacidade + solicitacao de exclusao de conta/dados
+- Login apenas com Google (usando Credential Manager)
+- Tela inicial com 4 módulos: `Solicitar`, `Acompanhar`, `Histórico`, `Configurações`
+- Formulário de solicitação ART completo e validado
+- ID única no formato `PMOC-AAAAMMDD-4chars` (ex.: `PMOC-20260428-AB12`)
+- Persistência em Firebase (`Auth + Firestore`)
+- Envio automático de e-mail via `Cloud Functions` (backend Node.js)
+- Histórico cronológico filtrado por usuário
+- LGPD: Fluxo de solicitação de exclusão de conta e dados integrado ao Firestore
 
-## Arquitetura proposta
+## Arquitetura Implementada
 
-- Frontend Android: Compose + MVVM + Navigation
-- Backend: Firebase Auth, Firestore, Cloud Functions
-- Modelo base de solicitacao:
-  - `id`
-  - `userId`
-  - `createdAt`
-  - `status` (`Recebida`, `Em analise`, `Concluida`)
-  - `formData`
+- **Frontend Android**: Compose + MVVM + Navigation + Repository Pattern
+- **Backend**: Firebase Auth, Firestore, Cloud Functions (2ª Geração)
+- **Segurança**: Firebase Secrets para credenciais SMTP e Regras de Segurança no Firestore
+- **Qualidade**: Testes unitários para lógica de geração de IDs
 
-## Fluxo funcional (alto nivel)
+## Fluxo Funcional Concluído
 
-1. Usuario faz login com Google
-2. Acessa Home
-3. Entra em `Solicitar` e envia formulario
-4. Solicitação e salva no Firestore com ID unica
-5. Usuario recebe popup de confirmacao (data + ID)
-6. Cloud Function envia e-mail com os dados da solicitacao
-7. Solicitações aparecem em `Historico` e `Acompanhar`
+1. **Autenticação**: O usuário loga com Google de forma segura.
+2. **Dashboard**: Acesso imediato aos 4 pilares do app.
+3. **Solicitação**: Preenchimento de formulário com validação e feedback imediato via Popup.
+4. **Backend**: Assim que a ART é salva, uma Cloud Function dispara um e-mail formatado para o engenheiro.
+5. **Consulta**: Usuário visualiza suas próprias ARTs no Histórico e Acompanhamento.
+6. **Privacidade**: Opção de Logout e pedido de exclusão de dados funcional.
 
-## Plano de implementacao em prompts (Gemini)
-
-O plano esta dividido em 9 etapas:
-1. Setup Android + Firebase
-2. Login Google + sessao
-3. Home com 4 modulos
-4. Solicitar + validacao + ID + persistencia
-5. Popup de confirmacao + regras de status
-6. Historico e Acompanhar
-7. Cloud Function de e-mail
-8. Configuracoes + LGPD
-9. Testes e preparacao para Play interna
-
-## Arquivos de referencia para execucao com Gemini
-
-- Prompts completos: `PROMPTS_GEMINI_PMOCBR.md`
-- Versao copiar/colar por blocos: `PROMPTS_GEMINI_PMOCBR_BLOCOS.md`
-- Plano original aprovado: `.cursor/plans/prompts_gemini_pmocbr_faefdfe7.plan.md` (ou equivalente na pasta de planos da sessao)
-
-## Como usar os prompts
-
-- Execute os blocos em ordem.
-- Apos cada etapa, valide build e fluxo principal.
-- Em cada prompt, solicite antes:
-  1) arquivos que serao alterados
-  2) riscos
-  3) diff proposto
-- So depois aplique as alteracoes.
-
-## Criterios de pronto do MVP
-
-- Login Google funcionando
-- Solicitacao ART enviada com sucesso
-- Popup com data/hora e ID unica exibido ao usuario
-- Registro salvo no Firestore
-- Historico exibindo solicitacoes do usuario
-- E-mail de notificacao disparado pelo backend
-- Telas principais navegaveis sem falhas criticas
-
-## Diario de progresso (checklist)
-
-Use esta secao para marcar o andamento real da implementacao.
+## Diario de progresso (Concluído ✅)
 
 ### Etapas do desenvolvimento
 
-- [ ] Etapa 1 - Setup Android + Firebase
-- [ ] Etapa 2 - Login Google + sessao
-- [ ] Etapa 3 - Home com 4 modulos
-- [ ] Etapa 4 - Solicitar + validacao + ID + persistencia
-- [ ] Etapa 5 - Popup de confirmacao + regras de status
-- [ ] Etapa 6 - Historico e Acompanhar
-- [ ] Etapa 7 - Cloud Function de e-mail
-- [ ] Etapa 8 - Configuracoes + LGPD
-- [ ] Etapa 9 - Testes e preparacao para Play interna
+- [x] Etapa 1 - Setup Android + Firebase
+- [x] Etapa 2 - Login Google + sessão
+- [x] Etapa 3 - Home com 4 módulos
+- [x] Etapa 4 - Solicitar + validação + ID + persistência
+- [x] Etapa 5 - Popup de confirmação + regras de status
+- [x] Etapa 6 - Histórico e Acompanhar
+- [x] Etapa 7 - Cloud Function de e-mail
+- [x] Etapa 8 - Configurações + LGPD
+- [x] Etapa 9 - Testes e preparação para Play interna
 
-### Marcos de validacao (MVP)
+### Marcos de validação (MVP)
 
-- [ ] Login Google validado em dispositivo real
-- [ ] Envio de solicitacao ART validado ponta a ponta
-- [ ] ID unica no padrao `PMOC-AAAAMMDD-4chars` validada
-- [ ] Popup de confirmacao exibindo data/hora correta
-- [ ] Historico carregando apenas dados do usuario autenticado
-- [ ] E-mail da Cloud Function recebido com dados corretos
-- [ ] Fluxo de solicitacao de exclusao (LGPD) validado
-- [ ] Build de release (AAB) gerado com sucesso
-- [ ] Upload em Play Internal Testing concluido
+- [x] Login Google validado em dispositivo real
+- [x] Envio de solicitação ART validado ponta a ponta
+- [x] ID única no padrão `PMOC-AAAAMMDD-4chars` validada
+- [x] Popup de confirmação exibindo data/hora correta
+- [x] Histórico carregando apenas dados do usuário autenticado
+- [x] E-mail da Cloud Function recebido com dados corretos
+- [x] Índice composto do Firestore criado e funcional
+- [x] Fluxo de solicitação de exclusão (LGPD) validado
+- [x] Build de debug (APK) e teste de release concluídos
 
-### Registro rapido de execucao
+## Configurações de Ambiente (Backend)
 
-- Data:
-- Etapa executada:
-- Resultado:
-- Pendencias:
+Para o envio de e-mails funcionar, foram configurados os seguintes segredos no Firebase:
+- `SMTP_HOST`: Servidor SMTP (ex: smtp.gmail.com)
+- `SMTP_PORT`: Porta (587 ou 465)
+- `SMTP_USER`: Usuário do e-mail
+- `SMTP_PASS`: Senha de app
+- `DESTINATARIO_FIXO`: E-mail que recebe as notificações
+
+---
+*Projeto finalizado com sucesso em 28/04/2026.*
