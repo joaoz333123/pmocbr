@@ -10,6 +10,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.example.pmocbr.auth.AuthManager
 import com.example.pmocbr.auth.AuthViewModel
+import com.example.pmocbr.data.repository.SolicitacaoRepository
 import com.example.pmocbr.ui.navigation.NavGraph
 import com.example.pmocbr.ui.theme.PMOCBRTheme
 
@@ -19,6 +20,7 @@ class MainActivity : ComponentActivity() {
         
         val authManager = AuthManager(this)
         val authViewModel = AuthViewModel(authManager)
+        val solicitacaoRepository = SolicitacaoRepository()
 
         enableEdgeToEdge()
         setContent {
@@ -27,7 +29,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    NavGraph(authViewModel)
+                    NavGraph(authViewModel, authManager, solicitacaoRepository)
                 }
             }
         }

@@ -51,16 +51,25 @@ class AuthManager(private val context: Context) {
 
     private suspend fun handleSignIn(result: GetCredentialResponse): Result<Unit> {
         val credential = result.credential
-        return if (credential is GoogleIdTokenCredential) {
-            try {
-                val firebaseCredential = GoogleAuthProvider.getCredential(credential.idToken, null)
-                auth.signInWithCredential(firebaseCredential).await()
-                Result.success(Unit)
-            } catch (e: Exception) {
-                Result.failure(e)
+        
+        return try {
+            val idToken = when (credential) {
+                is GoogleIdTokenCredential -> credential.idToken
+                is androidx.credentials.CustomCredential -> {
+                    if (credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
+                        GoogleIdTokenCredential.createFrom(credential.data).idToken
+                    } else {
+                        throw Exception("Tipo de credencial customizada desconhecida: ${credential.type}")
+                    }
+                }
+                else -> throw Exception("Tipo de credencial inesperado: ${credential::class.java.simpleName}")
             }
-        } else {
-            Result.failure(Exception("Tipo de credencial inválido"))
+
+            val firebaseCredential = GoogleAuthProvider.getCredential(idToken, null)
+            auth.signInWithCredential(firebaseCredential).await()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
         }
     }
 

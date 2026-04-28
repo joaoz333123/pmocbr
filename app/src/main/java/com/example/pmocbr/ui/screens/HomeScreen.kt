@@ -116,7 +116,7 @@ fun MenuCard(
                 imageVector = icon,
                 contentDescription = title,
                 modifier = Modifier.size(48.dp),
-                color = MaterialTheme.colorScheme.primary
+                tint = MaterialTheme.colorScheme.primary
             )
             Spacer(modifier = Modifier.height(12.dp))
             Text(

@@ -5,10 +5,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.pmocbr.auth.AuthViewModel
+import com.example.pmocbr.auth.AuthManager
+import com.example.pmocbr.data.repository.SolicitacaoRepository
 import com.example.pmocbr.ui.screens.*
 
 @Composable
-fun NavGraph(authViewModel: AuthViewModel) {
+fun NavGraph(
+    authViewModel: AuthViewModel,
+    authManager: AuthManager,
+    solicitacaoRepository: SolicitacaoRepository
+) {
     val navController = rememberNavController()
     val startDestination = if (authViewModel.currentUser != null) "home" else "login"
 
@@ -32,13 +38,25 @@ fun NavGraph(authViewModel: AuthViewModel) {
             )
         }
         composable("solicitar") {
-            SolicitarScreen(onBack = { navController.popBackStack() })
+            val solicitarViewModel = SolicitarViewModel(solicitacaoRepository, authManager)
+            SolicitarScreen(
+                viewModel = solicitarViewModel,
+                onBack = { navController.popBackStack() }
+            )
         }
         composable("acompanhar") {
-            AcompanharScreen(onBack = { navController.popBackStack() })
+            val solicitacoesViewModel = SolicitacoesViewModel(solicitacaoRepository, authManager)
+            AcompanharScreen(
+                viewModel = solicitacoesViewModel,
+                onBack = { navController.popBackStack() }
+            )
         }
         composable("historico") {
-            HistoricoScreen(onBack = { navController.popBackStack() })
+            val solicitacoesViewModel = SolicitacoesViewModel(solicitacaoRepository, authManager)
+            HistoricoScreen(
+                viewModel = solicitacoesViewModel,
+                onBack = { navController.popBackStack() }
+            )
         }
         composable("configuracoes") {
             ConfiguracoesScreen(
