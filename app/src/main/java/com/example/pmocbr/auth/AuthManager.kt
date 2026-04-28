@@ -32,7 +32,7 @@ class AuthManager(private val context: Context) {
             // under oauth_client -> client_type 3
             val googleIdOption = GetGoogleIdOption.Builder()
                 .setFilterByAuthorizedAccounts(false)
-                .setServerClientId("SEU_WEB_CLIENT_ID_AQUI") // Instruções abaixo para obter
+                .setServerClientId("667138367640-opcpe3ksgk2gh7l6kmq4mnsmhnkgs1v6.apps.googleusercontent.com") // Instruções abaixo para obter
                 .setNonce(hashedNonce)
                 .build()
 
