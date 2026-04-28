@@ -5,8 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.pmocbr.auth.AuthViewModel
-import com.example.pmocbr.ui.screens.HomeScreen
-import com.example.pmocbr.ui.screens.LoginScreen
+import com.example.pmocbr.ui.screens.*
 
 @Composable
 fun NavGraph(authViewModel: AuthViewModel) {
@@ -27,11 +26,29 @@ fun NavGraph(authViewModel: AuthViewModel) {
         composable("home") {
             HomeScreen(
                 viewModel = authViewModel,
+                onNavigate = { route ->
+                    navController.navigate(route)
+                }
+            )
+        }
+        composable("solicitar") {
+            SolicitarScreen(onBack = { navController.popBackStack() })
+        }
+        composable("acompanhar") {
+            AcompanharScreen(onBack = { navController.popBackStack() })
+        }
+        composable("historico") {
+            HistoricoScreen(onBack = { navController.popBackStack() })
+        }
+        composable("configuracoes") {
+            ConfiguracoesScreen(
+                viewModel = authViewModel,
                 onLogout = {
                     navController.navigate("login") {
                         popUpTo("home") { inclusive = true }
                     }
-                }
+                },
+                onBack = { navController.popBackStack() }
             )
         }
     }
